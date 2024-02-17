@@ -1,0 +1,84 @@
+pipeline {
+  agent any
+  stages {
+    stage('Set Default Docker Context') {
+            steps {
+                sh 'docker context use default'
+            }
+            }
+    stage('checkout code- github') {
+      steps {
+        git(url: 'https://github.com/ofirzvishaboo/User_Creation_API.git', branch: 'master')
+      }
+    }
+
+    stage('Install Requirements') {
+            steps {
+                // Install pip packages or other dependencies if needed
+                sh 'pip3 install -r requirements.txt'
+            }
+        }
+
+    stage('run rest_app') {
+      steps {
+        sh 'python3 rest_app.py &'
+      }
+    }
+
+    stage('run backend_testing') {
+      steps {
+        sh 'python3 backend_testing.py'
+      }
+    }
+
+    stage('run clean_environment') {
+      steps {
+        sh 'python3 clean_environment.py'
+      }
+    }
+
+    stage('Build Docker Image - Locally') {
+      steps {
+          // Build Docker image locally
+        sh 'docker build -t ofirzvishaboo/flask_name_api .'
+        }
+    }
+
+    stage('Push Docker Image to Hub') {
+      steps {
+        // Log in to Docker Hub
+        withDockerRegistry([credentialsId: 'ofir-dockerhub', url: 'https://registry.hub.docker.com']) {
+        sh 'docker push ofirzvishaboo/flask_name_api:latest'
+        }
+      }
+    }
+
+    stage('Set Compose Image Version') {
+      steps {
+        // Set version inside .env file for docker-compose
+        sh 'echo IMAGE_TAG=${BUILD_NUMBER} > .env'
+      }
+    }
+
+    stage('Run Docker Compose Up') {
+      steps {
+        sh 'docker-compose up -d'
+      }
+    }
+
+    stage('Test Dockerized App') {
+      steps {
+
+        // Test dockerized app using docker_backend_testing.py
+        sh 'python3 docker_backend_testing.py'
+      }
+    }
+
+    stage('Clean Environment') {
+      steps {
+        sh 'docker-compose down'
+        sh 'docker rmi ofirzvishaboo/flask_name_api:latest'
+      }
+    }
+  }
+}

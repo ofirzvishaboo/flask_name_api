@@ -1,0 +1,13 @@
+replicaCount: 2
+image:
+  repository: ofirzvishaboo/flask_name_api
+  tag: latest
+service:
+  type: LoadBalancer
+appPort: 3000
+database:
+  host: "db" # Assuming service name from docker-compose.yml
+  port: 3306
+  user: "root"
+  password: "pythoncourse"
+  db: "my_db"

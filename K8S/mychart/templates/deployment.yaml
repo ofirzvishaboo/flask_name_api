@@ -1,0 +1,70 @@
+#apiVersion: apps/v1
+#kind: Deployment
+#metadata:
+#  name: my-flask-app
+#spec:
+#  replicas: {{ .Values.replicaCount }}
+#  selector:
+#    matchLabels:
+#      app: my-flask-app
+#  template:
+#    metadata:
+#      labels:
+#        app: my-flask-app
+#    spec:
+#      containers:
+#      - name: my-flask-app
+#        image: {{ .Values.image.repository }}
+#        ports:
+#        - containerPort: {{ .Values.appPort }}
+#          name: http
+#apiVersion: apps/v1
+#kind: Deployment
+#metadata:
+#  name: my-flask-app
+#spec:
+#  replicas: {{ .Values.replicaCount }}
+#  selector:
+#    matchLabels:
+#      app: my-flask-app
+#  template:
+#    metadata:
+#      labels:
+#        app: my-flask-app
+#    spec:
+#      containers:
+#      - name: my-flask-app
+#        image: {{ .Values.image.repository }}
+#        ports:
+#        - containerPort: {{ .Values.appPort }}
+#          name: http
+#        env:
+#        - name: MYSQL_HOST
+#          value: mysql-service
+#        - name: MYSQL_USER
+#          value: {{ .Values.database.user }}
+#        - name: MYSQL_PASSWORD
+#          value: {{ .Values.database.password }}
+#        # Add other environment variables as needed
+#        command: ["sh", "-c", "python3 rest_app.py"]
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-flask-api
+  labels:
+    app: flask-api
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: flask-api
+  template:
+    metadata:
+      labels:
+        app: flask-api
+    spec:
+      containers:
+        - name: flask-api
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: 3000

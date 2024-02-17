@@ -1,0 +1,10 @@
+replicaCount: 1
+image:
+  repository: mysql
+  tag: 8.0
+  pullPolicy: IfNotPresent
+mysqlRootPassword: pythoncourse
+mysqlPassword: pythoncourse
+mysqlDatabase: my_db
+service:
+  port: 3306
