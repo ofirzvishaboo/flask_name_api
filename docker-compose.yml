@@ -26,7 +26,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      database_host: host.docker.internal
+      database_host: db
       MYSQL_DB_HOST: db:3306
       MYSQL_DB_USER: root
       MYSQL_DB_PASSWORD: pythoncourse
