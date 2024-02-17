@@ -5,4 +5,4 @@ until curl -s http://db:3306 &> /dev/null; do
   sleep 1
 done
 
-exec docker-entrypoint.sh devops-rest
+exec devops-rest

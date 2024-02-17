@@ -16,10 +16,11 @@ services:
 
   devops-rest:
     command:
-      - /bin/bash
+      - sh
       - -c
-      - |-
-        sh wait-for-db.sh
+      - |
+        sleep 3
+        python3 rest_app.py
     depends_on:
       - db
     image: ofirzvishaboo/flask_name_api:latest

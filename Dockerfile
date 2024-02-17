@@ -6,7 +6,7 @@ WORKDIR /app
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
-COPY flask_name_api .
+COPY . .
 
 EXPOSE 3000
 ENV database_host mysql-service
